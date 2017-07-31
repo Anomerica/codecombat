@@ -7,6 +7,9 @@ targets = [
   'coffeescript'
 ]
 
+console.log fs.readdirSync(path.join __dirname, '..', 'bower_components')
+console.log fs.readdirSync(path.join __dirname, '..', 'bower_components', 'esper.js')
+
 for target in targets
   src = path.join __dirname, '..', 'bower_components', 'esper.js', "esper-plugin-lang-#{target}.js"
   dest = path.join __dirname, '..', 'public', 'javascripts', 'app', 'vendor', "aether-#{target}.js"
