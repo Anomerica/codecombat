@@ -127,7 +127,7 @@ module.exports = class Problem
     en = require('locale/en').translation
     lineNumberPart = ''
     if /Line \d+: /.test(msg)
-      lineNumber = msg.match(/Line (\d)+: /)[1]
+      lineNumber = msg.match(/Line (\d+): /)[1]
       msg = msg.replace(/Line \d+: /, '')
       lineNumberPart = $.i18n.t("esper.line_no").replace('$1', lineNumber)
     
