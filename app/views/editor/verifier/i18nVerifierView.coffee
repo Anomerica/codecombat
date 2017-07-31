@@ -10,8 +10,8 @@ I18nVerifierComponent = Vue.extend
     allLocales: Object.keys(_.omit(locale, 'update', 'installVueI18n')).concat('rot13')
     language: 'en'
     levelSlug: location.href.match('/editor/i18n-verifier/(.*)')?[1]
-    startDay: '2017-05-01'
-    endDay: '2017-07-30'
+    startDay: moment(new Date()).subtract(2, 'weeks').format("YYYY-MM-DD")
+    endDay: moment(new Date()).format("YYYY-MM-DD")
     partialThreshold: 1
     completeThreshold: 99
     countThreshold: 0
@@ -102,38 +102,22 @@ I18nVerifierComponent = Vue.extend
     getProblemsAndCompare: (levelSlug) ->
       @getProblems(levelSlug).then (problems) =>
         @compareStrings(problems)
-    getProblems: (levelSlug) ->
-      new Promise (accept, reject) =>
-        $.post(
-          '/db/user.code.problem/-/common_problems',
-          {startDay: @startDay, endDay: @endDay, slug: levelSlug},
-          (newProblems) =>
-            for problem in newProblems
-              problem.hint ?= ''
-            Vue.set(@problemsByLevel, levelSlug, newProblems)
-            @totalCount = _.reduce(_.map(@problems, (p)->p.count), (a,b)->a+b)
-            accept(newProblems)
-        )
+    getProblems: co.wrap (levelSlug) ->
+      newProblems = yield api.userCodeProblems.getCommon({ levelSlug, @startDay, @endDay })
+      for problem in newProblems
+        problem.hint ?= ''
+      Vue.set(@problemsByLevel, levelSlug, newProblems)
+      @totalCount = _.reduce(_.map(@problems, (p)->p.count), (a,b)->a+b)
+      return newProblems
     compareStrings: (problems) ->
       $.i18n.setLng(@language)
       problems.forEach (problem) =>
         original = problem[@messageOrHint]
         translated = Problem.prototype.translate(problem[@messageOrHint])
-        # distance = Levenshtein.get(_.last(original.split(':')), _.last(translated.split(':')))
-        # trimmed = original
-        # for regex in @regexes
-        #   trimmed = trimmed.replace(regex, '')
         trimmed = translated
         for regex in @otherRegexes
-          if false and /argument.*has.*a.*problem/.test(original)# and /Target.*an.*enemy.*variable/.test(regex.toString())
-            console.log "===="
-            console.log regex
-            console.log trimmed
-            console.log trimmed.replace(regex, '').replace(/^\n/, '')
-            debugger if trimmed isnt trimmed.replace(regex, '').replace(/^\n/, '')
           trimmed = trimmed.replace(regex, '').replace(/^\n/, '')
         Vue.set(problem, 'translated', translated)
-        # Vue.set(problem, 'distance', distance)
         Vue.set(problem, 'trimmed', trimmed)
     slugifyProblem: (problem) ->
       str = _.string.slugify(problem.trimmed)

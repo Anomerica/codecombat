@@ -2316,7 +2316,7 @@ module.exports = nativeDescription: "rot13", englishDescription: "English with t
     attack_capitalization: "Nggnpx $1, abg $2. (Pncvgny yrggref ner vzcbegnag.)"
     empty_while: "Rzcgl juvyr fgngrzrag. Chg 4 fcnprf va sebag bs fgngrzragf vafvqr gur juvyr fgngrzrag."
     line_of_site: "`$1`'f nethzrag `$2` unf n ceboyrz. Vf gurer na rarzl jvguva lbhe yvar-bs-fvtug lrg?"
-    colon_after_while: "Arrq n `:` nsgre `juvyr-gehr ybbc:`."
+    need_a_after_while: "Arrq n `$1` nsgre `$2`."
     too_much_indentation: "Gbb zhpu vaqragngvba ng gur ortvaavat bs guvf yvar."
     missing_hero: "Zvffvat `$1` xrljbeq; fubhyq or `$2`."
     takes_no_arguments: "`$1` gnxrf ab nethzragf."
@@ -2346,7 +2346,6 @@ module.exports = nativeDescription: "rot13", englishDescription: "English with t
     error_you_said_achoo: "Lbh fnvq: $1, ohg gur cnffjbeq vf: $2. (Pncvgny yrggref ner vzcbegnag.)"
     indentation_error_unindent_does: "Vaqragngvba Reebe: havaqrag qbrf abg zngpu nal bhgre vaqragngvba yriry"
     indentation_error: "Vaqragngvba reebe."
-    need_a_after_while: "Arrq n `:` nsgre `$1`." # GBQB: Erpbapvyr jvgu pbyba_nsgre_juvyr
     need_a_on_the: "Arrq n `:` ba gur raq bs gur yvar sbyybjvat `$1`."
     attempt_to_call_undefined: "nggrzcg gb pnyy '$1' (n avy inyhr)"
     unterminated: "Hagrezvangrq `$1`"
