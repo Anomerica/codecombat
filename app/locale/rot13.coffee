@@ -2358,4 +2358,12 @@ module.exports = nativeDescription: "rot13", englishDescription: "English with t
     attacks_argument_enemy_has: "`$1`'f nethzrag `$2` unf n ceboyrz."
     is_there_an_enemy: "Vf gurer na rarzl jvguva lbhe yvar-bs-fvtug lrg?"
     target_is_null_is: "Gnetrg vf $1. Vf gurer nyjnlf n gnetrg gb nggnpx? (Hfr $2?)"
-    
+    hero_has_no_method: "`$1` unf ab zrgubq `$2`."
+    there_is_a_problem: "Gurer vf n ceboyrz jvgu lbhe pbqr."
+    did_you_mean: "Qvq lbh zrna $1? Lbh qb abg unir na vgrz rdhvccrq jvgu gung fxvyy."
+    missing_a_quotation_mark: "Zvffvat n dhbgngvba znex. "
+    missing_var_use_var: "Zvffvat `$1`. Hfr `$2` gb znxr n arj inevnoyr."
+    you_do_not_have: "Lbh qb abg unir na vgrz rdhvccrq jvgu gur $1 fxvyy."
+    put_each_command_on: "Chg rnpu pbzznaq ba n frcnengr yvar"
+    are_you_missing_a: "Ner lbh zvffvat n '$1' nsgre '$2'? "
+    your_parentheses_must_match: "Lbhe cneragurfrf zhfg zngpu."

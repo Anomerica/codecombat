@@ -3,33 +3,34 @@ Problem = require 'views/play/level/tome/Problem'
 locale = require 'locale/locale'
 api = require 'core/api'
 require 'vendor/co'
+utils = require 'core/utils'
 
 I18nVerifierComponent = Vue.extend
   template: require('templates/editor/verifier/i18n-verifier-view')()
   data: ->
     allLocales: Object.keys(_.omit(locale, 'update', 'installVueI18n')).concat('rot13')
     language: 'en'
-    levelSlug: location.href.match('/editor/i18n-verifier/(.*)')?[1]
+    levelSlug: null
     startDay: moment(new Date()).subtract(2, 'weeks').format("YYYY-MM-DD")
     endDay: moment(new Date()).format("YYYY-MM-DD")
     partialThreshold: 1
     completeThreshold: 99
     countThreshold: 0
     totalCount: 0
-    messageOrHint: 'message'
+    messageOrHint: utils.getQueryVariable('messageOrHint') or 'message'
     me: me
     serverConfig: serverConfig
     problemsByLevel: {}
     regexes: []
     otherRegexes: []
-    displayMode: 'human-readable'
+    displayMode: utils.getQueryVariable('displayMode') or 'human-readable'
     showCampaigns: false
     showLevels: false
     showTranslated: true
     showUntranslated: true
     campaigns: []
     selectedCampaign: null
-    selectedLevelSlugs: [_.last(location.href.split('/'))]
+    selectedLevelSlugs: []
     loading: true
   computed:
     exportList: ->
@@ -42,9 +43,10 @@ I18nVerifierComponent = Vue.extend
     problems: ->
       _.sortBy(_.flatten(Object.values(@problemsByLevel), true), (p) -> -p.count)
   created: co.wrap ->
+    @levelSlug = @$options.propsData.levelSlug
+    @selectedLevelSlugs = [@levelSlug]
     i18n.setLng(@language)
     yield @loadCampaigns()
-    console.log @campaigns
     yield application.moduleLoader.loadLanguage(@language)
     @setupRegexes()
     newProblems = yield @getProblems(@levelSlug)
@@ -127,8 +129,8 @@ module.exports = class I18nVerifierView extends RootComponent
   id: 'i18n-verifier-view'
   template: require 'templates/base-flat'
   VueComponent: I18nVerifierComponent
-  constructor: (options, @courseInstanceID) ->
-    @propsData = { @courseInstanceID }
+  constructor: (options, @levelSlug) ->
+    @propsData = { @levelSlug }
     super options
   destroy: ->
     super(arguments...)

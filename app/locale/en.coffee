@@ -2358,4 +2358,12 @@
     attacks_argument_enemy_has: "`$1`'s argument `$2` has a problem."
     is_there_an_enemy: "Is there an enemy within your line-of-sight yet?"
     target_is_null_is: "Target is $1. Is there always a target to attack? (Use $2?)"
-    
+    hero_has_no_method: "`$1` has no method `$2`."
+    there_is_a_problem: "There is a problem with your code."
+    did_you_mean: "Did you mean $1? You do not have an item equipped with that skill."
+    missing_a_quotation_mark: "Missing a quotation mark. "
+    missing_var_use_var: "Missing `$1`. Use `$2` to make a new variable."
+    you_do_not_have: "You do not have an item equipped with the $1 skill."
+    put_each_command_on: "Put each command on a separate line"
+    are_you_missing_a: "Are you missing a '$1' after '$2'? "
+    your_parentheses_must_match: "Your parentheses must match."
