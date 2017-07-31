@@ -82,7 +82,8 @@ I18nVerifierComponent = Vue.extend
       )
     setupRegexes: ->
       en = require('locale/en').translation
-      otherLang = require("locale/#{@language}").translation
+      # Call require like this to prevent preload.js from trying to load app/locale.js which doesn't exist
+      otherLang = window["require"]("locale/#{@language}").translation
       translationKeys = Object.keys(en.esper)
       @regexes = []
       for translationKey in translationKeys
