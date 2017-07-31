@@ -334,6 +334,7 @@ class HintCreator
     @context = context ? {}
 
   getHint: (code, {message, range, error, aether}) ->
+    console.log error
     return unless @context?
     if error.code is 'UndefinedVariable' and error.when is 'write' and aether.language.id is 'javascript'
       return "Missing `var`. Use `var #{error.ident} =` to make a new variable."

@@ -1,6 +1,8 @@
 RootComponent = require 'views/core/RootComponent'
 Problem = require 'views/play/level/tome/Problem'
 locale = require 'locale/locale'
+api = require 'core/api'
+require 'vendor/co'
 
 I18nVerifierComponent = Vue.extend
   template: require('templates/editor/verifier/i18n-verifier-view')()
@@ -39,19 +41,21 @@ I18nVerifierComponent = Vue.extend
       .value()
     problems: ->
       _.sortBy(_.flatten(Object.values(@problemsByLevel), true), (p) -> -p.count)
-  created: ->
+  created: co.wrap ->
     i18n.setLng(@language)
-    @loadCampaigns()
-    @loadLanguage(@language).then =>
-      @setupRegexes()
-      @getProblems(@levelSlug).then (newProblems) =>
-        @compareStrings(newProblems)
-        @loading = false
+    yield @loadCampaigns()
+    console.log @campaigns
+    yield application.moduleLoader.loadLanguage(@language)
+    @setupRegexes()
+    newProblems = yield @getProblems(@levelSlug)
+    @compareStrings(newProblems)
+    @loading = false
   watch:
-    language: ->
-      @loadLanguage(@language).then =>
-        @setupRegexes()
-        @compareStrings(@problems)
+    language: co.wrap ->
+      yield application.moduleLoader.loadLanguage(@language)
+      console.log "Finished loading language", @language
+      @setupRegexes()
+      @compareStrings(@problems)
     selectedLevelSlugs: ->
       @loading = true
       promises = []
@@ -65,21 +69,11 @@ I18nVerifierComponent = Vue.extend
     messageOrHint: ->
       @compareStrings(@problems)
   methods:
-    loadLanguage: (language) ->
-      new Promise (accept, reject) =>
-        loading = application.moduleLoader.loadLanguage(language)
-        if loading
-          application.moduleLoader.once 'load-complete', accept
-        else
-          accept()
-    loadCampaigns: ->
-      $.get(
-        '/db/campaign',
-        (@campaigns) =>
-          @selectedCampaign = _.find(@campaigns, (c) -> c.name is "Dungeon")
-          for campaign in @campaigns
-            Vue.set(campaign, 'levelsArray', Object.values(campaign.levels))
-      )
+    loadCampaigns: co.wrap ->
+      @campaigns = yield api.campaigns.getAll({ project: 'levels' })
+      @selectedCampaign = _.find(@campaigns, (c) -> c.name is "Dungeon")
+      for campaign in @campaigns
+        Vue.set(campaign, 'levelsArray', Object.values(campaign.levels))
     setupRegexes: ->
       en = require('locale/en').translation
       # Call require like this to prevent preload.js from trying to load app/locale.js which doesn't exist

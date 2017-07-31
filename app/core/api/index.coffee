@@ -1,5 +1,6 @@
 module.exports = {
   admin: require('./admin')
+  campaigns: require('./campaigns')
   classrooms: require('./classrooms')
   courses: require('./courses')
   courseInstances: require('./course-instances')
